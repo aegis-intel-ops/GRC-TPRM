@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: grc_intel_postgres
+    environment:
+      POSTGRES_DB: intelligence
+      POSTGRES_USER: intel_user
+      POSTGRES_PASSWORD: Change_Intel_Password_123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U intel_user -d intelligence" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4.2-alpine
+    container_name: grc_intel_redis
+    ports:
+      - "6379:6379"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  osint-service:
+    build: ./osint-service
+    container_name: grc_osint_service
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URL=postgresql://intel_user:Change_Intel_Password_123@postgres:5432/intelligence
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+
+  risk-engine:
+    build: ./risk-engine
+    container_name: grc_risk_engine
+    ports:
+      - "5002:5002"
+    environment:
+      - DATABASE_URL=postgresql://intel_user:Change_Intel_Password_123@postgres:5432/intelligence
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,0 +1,85 @@
+Open‑Source Foundations to Build On
+
+1. Eramba Community Edition
+Mature GRC platform
+
+Has risk registers, controls, audits
+
+Can be extended for vendor workflows
+
+Good for questionnaires + periodic reviews
+
+PHP-based, stable, widely used
+
+Use case:  
+A solid backbone for vendor onboarding, assessments, and compliance workflows.
+
+Hybrid Architecture 
+Base Layer (Open Source)
+Eramba or OpenGRC for:
+
+Vendor registry
+
+Questionnaires
+
+Evidence collection
+
+Audit trails
+
+Periodic reviews
+
+Intelligence Layer 
+OSINT enrichment microservice
+
+Automated risk scoring engine
+
+Vendor monitoring (domains, leaks, CVEs)
+
+alerts
+
+Experience Layer 
+Premium dashboards (Grafana or custom React)
+
+Executive summaries
+
+Automated workflows (n8n or ANOTHER orchestrator)
+
+Client-facing reports
+
+
+Install Eramba CE Using Docker (Recommended)
+This is the easiest, cleanest, and officially supported method.
+The Eramba site explicitly points users to their Docker Install Guide. 
+
+Prerequisites
+Docker Engine
+
+Docker Compose
+
+A Linux VM or your local machine (Ubuntu recommended)
+
+Step-by-Step Installation
+1. Create a directory for Eramba
+bash
+mkdir eramba
+cd eramba
+2. Create a docker-compose.yml file
+Use this template (from the official Docker install guidance):
+
+yaml
+version: '3.3'
+services:
+  eramba:
+    image: eramba/community:latest
+    container_name: eramba
+    ports:
+      - "80:80"
+    volumes:
+      - eramba_data:/var/www/eramba
+    restart: always
+
+volumes:
+  eramba_data:
+3. Start Eramba
+bash
+docker compose up -d
