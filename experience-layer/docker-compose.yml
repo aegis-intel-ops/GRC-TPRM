@@ -1,0 +1,22 @@
+services:
+  reports:
+    build: ./reports
+    container_name: grc_reports
+    ports:
+      - "5003:5003"
+    environment:
+      - DATABASE_URL=postgresql://intel_user:Change_Intel_Password_123@grc_intel_postgres:5432/intelligence
+      - OSINT_SERVICE_URL=http://grc_osint_service:5001
+      - RISK_ENGINE_URL=http://grc_risk_engine:5002
+    restart: always
+
+  dashboard:
+    build: ./dashboard
+    container_name: grc_dashboard
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_OSINT_URL=http://localhost:5001
+      - VITE_API_RISK_URL=http://localhost:5002
+      - VITE_API_REPORTS_URL=http://localhost:5003
+    restart: always
