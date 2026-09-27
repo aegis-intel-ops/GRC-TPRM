@@ -79,10 +79,12 @@ Thumbs.db
 .DS_Store
 desktop.ini
 
-# Reports
+# Reports (generated output). Source HTML below must stay tracked:
 *.pdf
 *.html
 !docs/*.html
+!experience-layer/dashboard/index.html
+!experience-layer/reports/templates/*.html
 
 # Secrets
 secrets/
